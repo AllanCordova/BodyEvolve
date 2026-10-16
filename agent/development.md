@@ -2,7 +2,7 @@
 
 The user picks one GitHub issue. The agent creates the branch, writes a plan, and waits. Product code starts only after the user approves the plan. Before anything is pushed, the agent runs the same checks as CI.
 
-Issues come from [tasks.md](tasks.md). Branch names, commits, and pull requests follow [git.md](git.md).
+Issues come from [tasks.md](tasks.md). Branch names, commits, and pull requests follow [git.md](git.md). Client screens follow [ui.md](ui.md).
 
 ## 1. Choose the issue
 
@@ -57,7 +57,7 @@ Write the plan before changing product code. It is the message the user reviews.
 
 - API behavior for a context goes in `api/app/<Context>/`. HTTP entry points in that folder carry the OpenAPI attributes.
 - Routes, config, and migrations stay in the Laravel shell, outside those context names.
-- The client screen for that context goes in `client/src/acesso/`, `objetivo/`, `perfil/`, `registro-de-exercicio/`, `registro-de-kcal/`, or `rota/`.
+- The client screen for that context goes in `client/src/acesso/`, `objetivo/`, `perfil/`, `registro-de-exercicio/`, `registro-de-kcal/`, or `rota/`. Its surfaces, type, and colors follow [ui.md](ui.md).
 
 ## 4. Approval
 
