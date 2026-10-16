@@ -1,5 +1,9 @@
 import { useState } from 'react'
 import { Link } from 'react-router'
+import Button from '../components/ui/button.jsx'
+import Card from '../components/ui/card.jsx'
+import Input from '../components/ui/input.jsx'
+import Label from '../components/ui/label.jsx'
 import { criarConta } from './api.js'
 import { mensagem } from './mensagem.js'
 
@@ -23,25 +27,27 @@ export default function CriarConta({ onCriou }) {
   }
 
   return (
-    <form aria-label="Criar conta" onSubmit={aoEnviar}>
-      <h2>Criar conta</h2>
-      <label>
-        Nome
-        <input name="name" type="text" autoComplete="name" />
-      </label>
-      <label>
-        E-mail
-        <input name="email" type="email" autoComplete="email" />
-      </label>
-      <label>
-        Senha
-        <input name="password" type="password" autoComplete="new-password" />
-      </label>
-      {erro ? <p role="alert">{erro}</p> : null}
-      <button type="submit">Criar conta</button>
-      <p>
-        <Link to="/entrar">Entrar</Link>
-      </p>
-    </form>
+    <Card>
+      <form aria-label="Criar conta" className="flex flex-col gap-4" onSubmit={aoEnviar}>
+        <h2 className="text-lg font-medium">Criar conta</h2>
+        <Label className="flex flex-col gap-2">
+          Nome
+          <Input name="name" type="text" autoComplete="name" />
+        </Label>
+        <Label className="flex flex-col gap-2">
+          E-mail
+          <Input name="email" type="email" autoComplete="email" />
+        </Label>
+        <Label className="flex flex-col gap-2">
+          Senha
+          <Input name="password" type="password" autoComplete="new-password" />
+        </Label>
+        {erro ? <p role="alert">{erro}</p> : null}
+        <Button type="submit">Criar conta</Button>
+        <Button variant="outline" asChild>
+          <Link to="/entrar">Entrar</Link>
+        </Button>
+      </form>
+    </Card>
   )
 }

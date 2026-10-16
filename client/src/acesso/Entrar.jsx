@@ -1,5 +1,9 @@
 import { useState } from 'react'
 import { Link } from 'react-router'
+import Button from '../components/ui/button.jsx'
+import Card from '../components/ui/card.jsx'
+import Input from '../components/ui/input.jsx'
+import Label from '../components/ui/label.jsx'
 import { entrar } from './api.js'
 import { mensagem } from './mensagem.js'
 
@@ -22,21 +26,23 @@ export default function Entrar({ onEntrou }) {
   }
 
   return (
-    <form aria-label="Entrar" onSubmit={aoEnviar}>
-      <h2>Entrar</h2>
-      <label>
-        E-mail
-        <input name="email" type="email" autoComplete="email" />
-      </label>
-      <label>
-        Senha
-        <input name="password" type="password" autoComplete="current-password" />
-      </label>
-      {erro ? <p role="alert">{erro}</p> : null}
-      <button type="submit">Entrar</button>
-      <p>
-        <Link to="/criar-conta">Criar conta</Link>
-      </p>
-    </form>
+    <Card>
+      <form aria-label="Entrar" className="flex flex-col gap-4" onSubmit={aoEnviar}>
+        <h2 className="text-lg font-medium">Entrar</h2>
+        <Label className="flex flex-col gap-2">
+          E-mail
+          <Input name="email" type="email" autoComplete="email" />
+        </Label>
+        <Label className="flex flex-col gap-2">
+          Senha
+          <Input name="password" type="password" autoComplete="current-password" />
+        </Label>
+        {erro ? <p role="alert">{erro}</p> : null}
+        <Button type="submit">Entrar</Button>
+        <Button variant="outline" asChild>
+          <Link to="/criar-conta">Criar conta</Link>
+        </Button>
+      </form>
+    </Card>
   )
 }

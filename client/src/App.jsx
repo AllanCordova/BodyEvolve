@@ -37,30 +37,32 @@ export default function App() {
   }, [])
 
   return (
-    <>
-      <h1>BodyEvolve</h1>
-      {erro ? <p role="alert">{erro}</p> : null}
-      {pronta ? (
-        <Routes>
-          <Route
-            path="/entrar"
-            element={sessao ? <Navigate to="/" replace /> : <Entrar onEntrou={setSessao} />}
-          />
-          <Route
-            path="/criar-conta"
-            element={sessao ? <Navigate to="/" replace /> : <CriarConta onCriou={setSessao} />}
-          />
-          <Route
-            path="/"
-            element={
-              sessao
-                ? <Inicio sessao={sessao} onSaiu={() => setSessao(null)} />
-                : <Navigate to="/entrar" replace />
-            }
-          />
-          <Route path="*" element={<Navigate to={sessao ? '/' : '/entrar'} replace />} />
-        </Routes>
-      ) : null}
-    </>
+    <div className="min-h-dvh bg-zinc-950 text-zinc-50">
+      <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col gap-6 px-4 pt-[max(1.5rem,env(safe-area-inset-top))] pr-[max(1rem,env(safe-area-inset-right))] pb-[max(1.5rem,env(safe-area-inset-bottom))] pl-[max(1rem,env(safe-area-inset-left))]">
+        <h1 className="text-2xl font-semibold tracking-tight">BodyEvolve</h1>
+        {erro ? <p className="rounded-lg border border-zinc-800 bg-zinc-900 p-4" role="alert">{erro}</p> : null}
+        {pronta ? (
+          <Routes>
+            <Route
+              path="/entrar"
+              element={sessao ? <Navigate to="/" replace /> : <Entrar onEntrou={setSessao} />}
+            />
+            <Route
+              path="/criar-conta"
+              element={sessao ? <Navigate to="/" replace /> : <CriarConta onCriou={setSessao} />}
+            />
+            <Route
+              path="/"
+              element={
+                sessao
+                  ? <Inicio sessao={sessao} onSaiu={() => setSessao(null)} />
+                  : <Navigate to="/entrar" replace />
+              }
+            />
+            <Route path="*" element={<Navigate to={sessao ? '/' : '/entrar'} replace />} />
+          </Routes>
+        ) : null}
+      </div>
+    </div>
   )
 }
