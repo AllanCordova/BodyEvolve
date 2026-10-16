@@ -25,4 +25,28 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: 'gasto_repouso_kcal', type: 'integer'),
     ],
 )]
+#[OA\Schema(
+    schema: 'RotinaNova',
+    required: ['lifestyle'],
+    properties: [
+        new OA\Property(
+            property: 'lifestyle',
+            type: 'string',
+            enum: ['sedentaria', 'moderada', 'vigorosa'],
+        ),
+    ],
+)]
+#[OA\Schema(
+    schema: 'Rotina',
+    required: ['lifestyle'],
+    properties: [
+        new OA\Property(
+            property: 'lifestyle',
+            type: 'string',
+            enum: ['sedentaria', 'moderada', 'vigorosa'],
+            nullable: true,
+        ),
+        new OA\Property(property: 'gasto_da_rotina_kcal', type: 'integer'),
+    ],
+)]
 class Contrato {}

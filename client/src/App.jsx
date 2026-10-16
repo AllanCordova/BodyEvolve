@@ -5,6 +5,7 @@ import Entrar from './acesso/Entrar.jsx'
 import Inicio from './acesso/Inicio.jsx'
 import Meta from './objetivo/Meta.jsx'
 import Corpo from './perfil/Corpo.jsx'
+import Rotina from './perfil/Rotina.jsx'
 import { sair, sessaoAtual } from './acesso/api.js'
 import { mensagem } from './acesso/mensagem.js'
 import Cabecalho from './components/Cabecalho.jsx'
@@ -76,6 +77,10 @@ export default function App() {
             <Route
               path="/perfil"
               element={sessao ? <Corpo /> : <Navigate to="/entrar" replace />}
+            />
+            <Route
+              path="/rotina"
+              element={sessao ? <Rotina /> : <Navigate to="/entrar" replace />}
             />
             <Route
               path="/objetivo"

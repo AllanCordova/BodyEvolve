@@ -3,9 +3,30 @@
 namespace Tests;
 
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use RuntimeException;
 
 abstract class TestCase extends BaseTestCase
 {
+    protected function setUpTheTestEnvironment(): void
+    {
+        if (! $this->app) {
+            $this->refreshApplication();
+            $this->recusarBancoLocal();
+        }
+
+        parent::setUpTheTestEnvironment();
+    }
+
+    private function recusarBancoLocal(): void
+    {
+        $conexao = config('database.default');
+        $banco = config('database.connections.'.$conexao.'.database');
+
+        if ($banco !== 'bodyevolve_test') {
+            throw new RuntimeException('O Pest só migra o banco bodyevolve_test.');
+        }
+    }
+
     public function soltarUsuarioDaSessao(): void
     {
         // O processo do teste reaproveita os guards. Cada request real começa sem esse cache.

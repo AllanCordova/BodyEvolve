@@ -9,6 +9,7 @@ services:
       POSTGRES_DB: bodyevolve
     volumes:
       - bodyevolve-pg:/var/lib/postgresql
+      - ./docker/postgres/create-test-database.sh:/docker-entrypoint-initdb.d/10-create-test-database.sh:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U bodyevolve -d bodyevolve"]
       interval: 10s

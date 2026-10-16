@@ -21,11 +21,11 @@ jobs:
         env:
           POSTGRES_USER: bodyevolve
           POSTGRES_PASSWORD: bodyevolve
-          POSTGRES_DB: bodyevolve
+          POSTGRES_DB: bodyevolve_test
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U bodyevolve -d bodyevolve"
+          --health-cmd "pg_isready -U bodyevolve -d bodyevolve_test"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
@@ -34,7 +34,7 @@ jobs:
       DB_CONNECTION: pgsql
       DB_HOST: 127.0.0.1
       DB_PORT: 5432
-      DB_DATABASE: bodyevolve
+      DB_DATABASE: bodyevolve_test
       DB_USERNAME: bodyevolve
       DB_PASSWORD: bodyevolve
     steps:

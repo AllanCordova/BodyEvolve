@@ -25,6 +25,11 @@ export default function Inicio({ sessao }) {
       </Card>
       <Card>
         <h2 className="text-lg font-medium">
+          <Link to="/rotina" className="flex min-h-11 items-center">Rotina</Link>
+        </h2>
+      </Card>
+      <Card>
+        <h2 className="text-lg font-medium">
           <Link to="/objetivo" className="flex min-h-11 items-center">Meta</Link>
         </h2>
       </Card>
