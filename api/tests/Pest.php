@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 pest()->extend(TestCase::class)->in(
@@ -11,3 +12,5 @@ pest()->extend(TestCase::class)->in(
     'RegistroDeKcal',
     'Algoritmo',
 );
+
+uses(RefreshDatabase::class)->in('Acesso');

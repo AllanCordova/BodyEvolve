@@ -10,7 +10,7 @@ Um contexto limitado é uma solução independente. Ele tem uma língua só e um
 
 | Contexto | O que resolve | O que guarda |
 | --- | --- | --- |
-| Acesso | Entrar e sair da conta | E-mail e senha cifrada |
+| Acesso | Entrar e sair da conta | E-mail, nome, senha cifrada e o caminho do ícone |
 | Objetivo | Uma meta por pessoa | Hipertrofia, emagrecimento, força ou resistência |
 | Perfil | Quem é a pessoa e quão ativo é o dia | Idade, sexo, altura, peso, rotina |
 | Registro de exercício | O que foi treinado | Sessão, exercício, séries, repetições, carga |

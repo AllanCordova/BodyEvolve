@@ -22,8 +22,10 @@ erDiagram
 
     USER {
         uuid id
+        string name
         string email
         string password_hash
+        string icon_path
         datetime created_at
     }
 
@@ -134,7 +136,7 @@ Alerta: `deficit_na_hipertrofia`, `ingestao_fora_do_alvo`, `proteina_fora_do_alv
 
 ## O que cada tabela guarda
 
-`USER` entra com e-mail e senha. A senha fica só como `password_hash`.
+`USER` entra com e-mail e senha e guarda o nome. A senha fica só como `password_hash`. O ícone é um arquivo no disco local `public`, em `storage/app/public`. `icon_path` é o caminho desse arquivo dentro do disco, e pode ficar vazio. `php artisan storage:link` cria o atalho `public/storage` para essa pasta. A URL pública do ícone sai desse atalho.
 
 `PROFILE` guarda idade, sexo, altura, rotina e a meta. O peso fica em `WEIGHT_LOG`. O cálculo usa o registro mais recente.
 
