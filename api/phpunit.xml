@@ -12,6 +12,7 @@
             <directory>tests/Feature</directory>
             <directory>tests/Acesso</directory>
             <directory>tests/Perfil</directory>
+            <directory>tests/Objetivo</directory>
             <directory>tests/Algoritmo</directory>
         </testsuite>
     </testsuites>
