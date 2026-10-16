@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router'
 import CriarConta from './acesso/CriarConta.jsx'
 import Entrar from './acesso/Entrar.jsx'
 import Inicio from './acesso/Inicio.jsx'
+import Meta from './objetivo/Meta.jsx'
 import Corpo from './perfil/Corpo.jsx'
 import { sair, sessaoAtual } from './acesso/api.js'
 import { mensagem } from './acesso/mensagem.js'
@@ -75,6 +76,10 @@ export default function App() {
             <Route
               path="/perfil"
               element={sessao ? <Corpo /> : <Navigate to="/entrar" replace />}
+            />
+            <Route
+              path="/objetivo"
+              element={sessao ? <Meta /> : <Navigate to="/entrar" replace />}
             />
             <Route path="*" element={<Navigate to={sessao ? '/' : '/entrar'} replace />} />
           </Routes>
