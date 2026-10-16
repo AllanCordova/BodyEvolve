@@ -1,42 +1,36 @@
-import { useState } from 'react'
 import { Link } from 'react-router'
+import Button from '../components/ui/button.jsx'
+import Card from '../components/ui/card.jsx'
+import Campo from './Campo.jsx'
 import { entrar } from './api.js'
-import { mensagem } from './mensagem.js'
+import { esquemaEntrar } from './esquema.js'
+import { useFormularioAcesso } from './formulario.js'
 
 export default function Entrar({ onEntrou }) {
-  const [erro, setErro] = useState('')
-
-  async function aoEnviar(evento) {
-    evento.preventDefault()
-    setErro('')
-    const dados = new FormData(evento.currentTarget)
-
-    try {
-      onEntrou(await entrar({
-        email: String(dados.get('email') ?? ''),
-        password: String(dados.get('password') ?? ''),
-      }))
-    } catch (falha) {
-      setErro(mensagem(falha))
-    }
-  }
+  const { registrar, aoEnviar, erros, aviso } = useFormularioAcesso(esquemaEntrar, {
+    email: '',
+    password: '',
+  })
 
   return (
-    <form aria-label="Entrar" onSubmit={aoEnviar}>
-      <h2>Entrar</h2>
-      <label>
-        E-mail
-        <input name="email" type="email" autoComplete="email" />
-      </label>
-      <label>
-        Senha
-        <input name="password" type="password" autoComplete="current-password" />
-      </label>
-      {erro ? <p role="alert">{erro}</p> : null}
-      <button type="submit">Entrar</button>
-      <p>
-        <Link to="/criar-conta">Criar conta</Link>
-      </p>
-    </form>
+    <Card>
+      <form
+        aria-label="Entrar"
+        className="flex flex-col gap-4"
+        noValidate
+        onSubmit={aoEnviar(async (dados) => {
+          onEntrou(await entrar(dados))
+        })}
+      >
+        <h2 className="text-lg font-medium">Entrar</h2>
+        <Campo rotulo="E-mail" type="email" autoComplete="email" erro={erros.email?.message} {...registrar('email')} />
+        <Campo rotulo="Senha" type="password" autoComplete="current-password" erro={erros.password?.message} {...registrar('password')} />
+        {aviso ? <p className="text-sm text-red-500" role="alert">{aviso}</p> : null}
+        <Button type="submit">Entrar</Button>
+        <Button variant="outline" asChild>
+          <Link to="/criar-conta">Criar conta</Link>
+        </Button>
+      </form>
+    </Card>
   )
 }

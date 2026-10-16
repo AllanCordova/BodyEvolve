@@ -1,47 +1,38 @@
-import { useState } from 'react'
 import { Link } from 'react-router'
+import Button from '../components/ui/button.jsx'
+import Card from '../components/ui/card.jsx'
+import Campo from './Campo.jsx'
 import { criarConta } from './api.js'
-import { mensagem } from './mensagem.js'
+import { esquemaConta } from './esquema.js'
+import { useFormularioAcesso } from './formulario.js'
 
 export default function CriarConta({ onCriou }) {
-  const [erro, setErro] = useState('')
-
-  async function aoEnviar(evento) {
-    evento.preventDefault()
-    setErro('')
-    const dados = new FormData(evento.currentTarget)
-
-    try {
-      onCriou(await criarConta({
-        name: String(dados.get('name') ?? ''),
-        email: String(dados.get('email') ?? ''),
-        password: String(dados.get('password') ?? ''),
-      }))
-    } catch (falha) {
-      setErro(mensagem(falha))
-    }
-  }
+  const { registrar, aoEnviar, erros, aviso } = useFormularioAcesso(esquemaConta, {
+    name: '',
+    email: '',
+    password: '',
+  })
 
   return (
-    <form aria-label="Criar conta" onSubmit={aoEnviar}>
-      <h2>Criar conta</h2>
-      <label>
-        Nome
-        <input name="name" type="text" autoComplete="name" />
-      </label>
-      <label>
-        E-mail
-        <input name="email" type="email" autoComplete="email" />
-      </label>
-      <label>
-        Senha
-        <input name="password" type="password" autoComplete="new-password" />
-      </label>
-      {erro ? <p role="alert">{erro}</p> : null}
-      <button type="submit">Criar conta</button>
-      <p>
-        <Link to="/entrar">Entrar</Link>
-      </p>
-    </form>
+    <Card>
+      <form
+        aria-label="Criar conta"
+        className="flex flex-col gap-4"
+        noValidate
+        onSubmit={aoEnviar(async (dados) => {
+          onCriou(await criarConta(dados))
+        })}
+      >
+        <h2 className="text-lg font-medium">Criar conta</h2>
+        <Campo rotulo="Nome" type="text" autoComplete="name" erro={erros.name?.message} {...registrar('name')} />
+        <Campo rotulo="E-mail" type="email" autoComplete="email" erro={erros.email?.message} {...registrar('email')} />
+        <Campo rotulo="Senha" type="password" autoComplete="new-password" erro={erros.password?.message} {...registrar('password')} />
+        {aviso ? <p className="text-sm text-red-500" role="alert">{aviso}</p> : null}
+        <Button type="submit">Criar conta</Button>
+        <Button variant="outline" asChild>
+          <Link to="/entrar">Entrar</Link>
+        </Button>
+      </form>
+    </Card>
   )
 }
