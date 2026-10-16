@@ -30,6 +30,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     env:
+      APP_KEY: "base64:LBxcJ3JCOU8u9k9M7xen/BPwP91Pjm2CvHBAN1nPRko="
       DB_CONNECTION: pgsql
       DB_HOST: 127.0.0.1
       DB_PORT: 5432
