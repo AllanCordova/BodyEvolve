@@ -6,16 +6,6 @@ use Illuminate\Http\Response;
 use OpenApi\Attributes as OA;
 
 #[OA\Get(
-    path: '/api/perfil',
-    operationId: 'abrirPerfil',
-    summary: 'Open the profile when a session exists',
-    tags: ['Acesso'],
-    responses: [
-        new OA\Response(response: 204, description: 'Session is present'),
-        new OA\Response(response: 401, description: 'No session'),
-    ],
-)]
-#[OA\Get(
     path: '/api/treino',
     operationId: 'abrirTreino',
     summary: 'Open training when a session exists',

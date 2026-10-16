@@ -13,4 +13,4 @@ pest()->extend(TestCase::class)->in(
     'Algoritmo',
 );
 
-uses(RefreshDatabase::class)->in('Acesso');
+uses(RefreshDatabase::class)->in('Acesso', 'Perfil', 'Algoritmo');

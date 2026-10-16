@@ -11,6 +11,8 @@
         <testsuite name="Feature">
             <directory>tests/Feature</directory>
             <directory>tests/Acesso</directory>
+            <directory>tests/Perfil</directory>
+            <directory>tests/Algoritmo</directory>
         </testsuite>
     </testsuites>
     <source>
