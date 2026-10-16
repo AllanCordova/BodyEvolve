@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
 import { beforeEach, expect, it, vi } from 'vitest'
 import App from '../App.jsx'
@@ -44,6 +44,16 @@ beforeEach(() => {
 
     if (endereco.endsWith('/api/acesso/conta') && method === 'POST') {
       const corpo = JSON.parse(opcoes.body)
+
+      if (!corpo.name) {
+        return json({
+          message: 'Informe o nome.',
+          errors: {
+            name: ['Informe o nome.'],
+          },
+        }, 422)
+      }
+
       sessao = {
         name: corpo.name,
         email: corpo.email,
@@ -54,6 +64,17 @@ beforeEach(() => {
 
     if (endereco.endsWith('/api/acesso/sessao') && method === 'POST') {
       const corpo = JSON.parse(opcoes.body)
+
+      if (corpo.email === 'invalido') {
+        return json({
+          message: 'Informe um e-mail válido.',
+          errors: {
+            email: ['Informe um e-mail válido.'],
+            password: ['Informe a senha.'],
+          },
+        }, 422)
+      }
+
       sessao = {
         name: 'Ana',
         email: corpo.email,
@@ -134,6 +155,61 @@ it('entra com o que foi digitado, mostra a conta e esconde o resto sem sessão',
   expect(screen.queryByRole('heading', { name: 'Treino' })).toBeNull()
   expect(screen.queryByRole('heading', { name: 'Comida' })).toBeNull()
   expect(screen.queryByRole('heading', { name: 'Alertas' })).toBeNull()
+})
+
+it('ajusta o erro embaixo do campo enquanto a pessoa escreve', async () => {
+  abrir('/entrar')
+
+  const entrar = await screen.findByRole('form', { name: 'Entrar' })
+  const email = within(entrar).getByLabelText('E-mail')
+
+  fireEvent.change(email, { target: { value: 'invalido' } })
+
+  const erroEmail = await within(entrar).findByText('Informe um e-mail válido.')
+
+  expect(erroEmail).toHaveAttribute('role', 'alert')
+  expect(erroEmail.compareDocumentPosition(email) & Node.DOCUMENT_POSITION_PRECEDING).toBeTruthy()
+  expect(within(entrar).queryByText('Informe a senha.')).toBeNull()
+  expect(fetch).not.toHaveBeenCalledWith(
+    `${apiUrl}/api/acesso/sessao`,
+    expect.objectContaining({ method: 'POST' }),
+  )
+
+  fireEvent.change(email, { target: { value: 'ana@example.com' } })
+
+  await waitFor(() => {
+    expect(within(entrar).queryByText('Informe um e-mail válido.')).toBeNull()
+  })
+
+  fireEvent.change(email, { target: { value: 'invalido' } })
+  fireEvent.submit(entrar)
+
+  const erroSenha = await within(entrar).findByText('Informe a senha.')
+
+  expect(erroSenha).toHaveAttribute('role', 'alert')
+  expect(erroSenha.compareDocumentPosition(within(entrar).getByLabelText('Senha')) & Node.DOCUMENT_POSITION_PRECEDING).toBeTruthy()
+
+  fireEvent.click(screen.getByRole('link', { name: 'Criar conta' }))
+
+  const criar = await screen.findByRole('form', { name: 'Criar conta' })
+  const senha = within(criar).getByLabelText('Senha')
+
+  fireEvent.change(senha, { target: { value: 'curta' } })
+
+  expect(await within(criar).findByText('A senha precisa ter pelo menos 8 caracteres.')).toBeInTheDocument()
+
+  fireEvent.change(senha, { target: { value: 'senha-longa' } })
+
+  await waitFor(() => {
+    expect(within(criar).queryByText('A senha precisa ter pelo menos 8 caracteres.')).toBeNull()
+  })
+
+  fireEvent.submit(criar)
+
+  const erroNome = await within(criar).findByText('Informe o nome.')
+
+  expect(erroNome).toHaveAttribute('role', 'alert')
+  expect(erroNome.compareDocumentPosition(within(criar).getByLabelText('Nome')) & Node.DOCUMENT_POSITION_PRECEDING).toBeTruthy()
 })
 
 it('cria a conta com nome, e-mail e senha', async () => {

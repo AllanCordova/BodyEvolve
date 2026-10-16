@@ -1,13 +1,6 @@
-import Button from '../components/ui/button.jsx'
 import Card from '../components/ui/card.jsx'
-import { sair } from './api.js'
 
-export default function Inicio({ sessao, onSaiu }) {
-  async function aoSair() {
-    await sair()
-    onSaiu()
-  }
-
+export default function Inicio({ sessao }) {
   return (
     <div className="flex flex-col gap-4">
       <Card>
@@ -36,9 +29,6 @@ export default function Inicio({ sessao, onSaiu }) {
       <Card>
         <h2 className="text-lg font-medium">Alertas</h2>
       </Card>
-      <Button variant="outline" type="button" onClick={aoSair}>
-        Sair
-      </Button>
     </div>
   )
 }

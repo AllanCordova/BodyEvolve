@@ -3,8 +3,9 @@ import { Navigate, Route, Routes } from 'react-router'
 import CriarConta from './acesso/CriarConta.jsx'
 import Entrar from './acesso/Entrar.jsx'
 import Inicio from './acesso/Inicio.jsx'
-import { sessaoAtual } from './acesso/api.js'
+import { sair, sessaoAtual } from './acesso/api.js'
 import { mensagem } from './acesso/mensagem.js'
+import Cabecalho from './components/Cabecalho.jsx'
 
 export default function App() {
   const [sessao, setSessao] = useState(null)
@@ -36,11 +37,22 @@ export default function App() {
     }
   }, [])
 
+  async function aoSair() {
+    setErro('')
+
+    try {
+      await sair()
+      setSessao(null)
+    } catch (falha) {
+      setErro(mensagem(falha))
+    }
+  }
+
   return (
     <div className="min-h-dvh bg-zinc-950 text-zinc-50">
       <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col gap-6 px-4 pt-[max(1.5rem,env(safe-area-inset-top))] pr-[max(1rem,env(safe-area-inset-right))] pb-[max(1.5rem,env(safe-area-inset-bottom))] pl-[max(1rem,env(safe-area-inset-left))]">
-        <h1 className="text-2xl font-semibold tracking-tight">BodyEvolve</h1>
-        {erro ? <p className="rounded-lg border border-zinc-800 bg-zinc-900 p-4" role="alert">{erro}</p> : null}
+        <Cabecalho pronta={pronta} sessao={sessao} onSair={aoSair} />
+        {erro ? <p className="text-sm text-red-500" role="alert">{erro}</p> : null}
         {pronta ? (
           <Routes>
             <Route
@@ -55,7 +67,7 @@ export default function App() {
               path="/"
               element={
                 sessao
-                  ? <Inicio sessao={sessao} onSaiu={() => setSessao(null)} />
+                  ? <Inicio sessao={sessao} />
                   : <Navigate to="/entrar" replace />
               }
             />
