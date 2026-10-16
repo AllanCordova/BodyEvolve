@@ -1,3 +1,4 @@
+import { Link } from 'react-router'
 import Card from '../components/ui/card.jsx'
 
 export default function Inicio({ sessao }) {
@@ -18,7 +19,9 @@ export default function Inicio({ sessao }) {
         ) : null}
       </Card>
       <Card>
-        <h2 className="text-lg font-medium">Perfil</h2>
+        <h2 className="text-lg font-medium">
+          <Link to="/perfil" className="flex min-h-11 items-center">Perfil</Link>
+        </h2>
       </Card>
       <Card>
         <h2 className="text-lg font-medium">Treino</h2>

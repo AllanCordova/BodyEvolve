@@ -36,7 +36,12 @@ it('devolve a conta da sessão e deixa as áreas vazias', function () {
         'email' => 'ana@example.com',
         'icon_url' => null,
     ]);
-    test()->getJson('/api/perfil')->assertNoContent();
+    test()->getJson('/api/perfil')->assertExactJson([
+        'age_years' => null,
+        'sex' => null,
+        'height_cm' => null,
+        'weight_kg' => null,
+    ]);
     test()->getJson('/api/treino')->assertNoContent();
     test()->getJson('/api/comida')->assertNoContent();
     test()->getJson('/api/alertas')->assertNoContent();
