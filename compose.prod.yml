@@ -1,0 +1,49 @@
+services:
+  postgres:
+    image: postgres:18.6
+    environment:
+      POSTGRES_USER: bodyevolve
+      POSTGRES_PASSWORD: bodyevolve
+      POSTGRES_DB: bodyevolve
+    volumes:
+      - bodyevolve-pg:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bodyevolve -d bodyevolve"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: ./api
+    ports:
+      - "8000:8000"
+    environment:
+      APP_NAME: BodyEvolve
+      APP_ENV: production
+      APP_DEBUG: "false"
+      APP_KEY: base64:8Pfcxt8y8lKOXn5SeRETeQxlvqkmt/CJpATFKUPYFvE=
+      APP_URL: http://localhost:8000
+      DB_CONNECTION: pgsql
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: bodyevolve
+      DB_USERNAME: bodyevolve
+      DB_PASSWORD: bodyevolve
+      SESSION_DRIVER: database
+      CACHE_STORE: database
+      QUEUE_CONNECTION: database
+      LOG_CHANNEL: stderr
+      L5_SWAGGER_GENERATE_ALWAYS: "false"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  client:
+    build: ./client
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api
+
+volumes:
+  bodyevolve-pg:

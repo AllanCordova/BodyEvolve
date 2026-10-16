@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:18.6
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: bodyevolve
+      POSTGRES_PASSWORD: bodyevolve
+      POSTGRES_DB: bodyevolve
+    volumes:
+      - bodyevolve-pg:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bodyevolve -d bodyevolve"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  bodyevolve-pg:
