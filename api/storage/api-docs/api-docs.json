@@ -1,0 +1,250 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "BodyEvolve",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/perfil": {
+            "get": {
+                "tags": [
+                    "Acesso"
+                ],
+                "summary": "Open the profile when a session exists",
+                "operationId": "abrirPerfil",
+                "responses": {
+                    "204": {
+                        "description": "Session is present"
+                    },
+                    "401": {
+                        "description": "No session"
+                    }
+                }
+            }
+        },
+        "/api/treino": {
+            "get": {
+                "tags": [
+                    "Acesso"
+                ],
+                "summary": "Open training when a session exists",
+                "operationId": "abrirTreino",
+                "responses": {
+                    "204": {
+                        "description": "Session is present"
+                    },
+                    "401": {
+                        "description": "No session"
+                    }
+                }
+            }
+        },
+        "/api/comida": {
+            "get": {
+                "tags": [
+                    "Acesso"
+                ],
+                "summary": "Open food when a session exists",
+                "operationId": "abrirComida",
+                "responses": {
+                    "204": {
+                        "description": "Session is present"
+                    },
+                    "401": {
+                        "description": "No session"
+                    }
+                }
+            }
+        },
+        "/api/alertas": {
+            "get": {
+                "tags": [
+                    "Acesso"
+                ],
+                "summary": "Open alerts when a session exists",
+                "operationId": "abrirAlertas",
+                "responses": {
+                    "204": {
+                        "description": "Session is present"
+                    },
+                    "401": {
+                        "description": "No session"
+                    }
+                }
+            }
+        },
+        "/api/acesso/conta": {
+            "post": {
+                "tags": [
+                    "Acesso"
+                ],
+                "summary": "Create an account with name, email and password",
+                "operationId": "criarConta",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContaNova"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Account created and session started",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Sessao"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Invalid account data"
+                    }
+                }
+            }
+        },
+        "/api/acesso/sessao": {
+            "get": {
+                "tags": [
+                    "Acesso"
+                ],
+                "summary": "Read the account of the current session",
+                "operationId": "sessaoAtual",
+                "responses": {
+                    "200": {
+                        "description": "Current account",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Sessao"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No session"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Acesso"
+                ],
+                "summary": "Sign in with email and password",
+                "operationId": "entrar",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Credenciais"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Session started",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Sessao"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Credentials do not match"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Acesso"
+                ],
+                "summary": "Sign out and end the session",
+                "operationId": "sair",
+                "responses": {
+                    "204": {
+                        "description": "Session ended"
+                    },
+                    "401": {
+                        "description": "No session"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Credenciais": {
+                "required": [
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password"
+                    }
+                },
+                "type": "object"
+            },
+            "ContaNova": {
+                "required": [
+                    "name",
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password"
+                    }
+                },
+                "type": "object"
+            },
+            "Sessao": {
+                "required": [
+                    "name",
+                    "email"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "icon_url": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Acesso",
+            "description": "Acesso"
+        }
+    ]
+}

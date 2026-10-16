@@ -6,10 +6,19 @@ A estrutura está em [arquitetura](docs/system/architecture.md).
 
 ## Rodar
 
+API, cliente e banco:
+
+```bash
+npm install
+npm run dev
+```
+
+`npm run dev` sobe o Postgres com o Docker Compose e, em seguida, a API e o cliente. A API cria o atalho `public/storage` quando ele ainda não existe, para servir o ícone da conta. Só o banco: `npm run db`.
+
 Banco, para desenvolver a API na máquina:
 
 ```bash
-docker compose -f compose.local.yml up -d
+docker compose up -d
 ```
 
 Na pasta `api`, com o PHP 8.5:
@@ -19,6 +28,7 @@ composer install
 cp .env.example .env
 php artisan key:generate
 php artisan migrate
+php artisan storage:link
 php artisan serve
 ```
 

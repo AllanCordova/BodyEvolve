@@ -7,7 +7,7 @@ Funções do produto, uma meta por pessoa. A regra continua em [software-domain]
 ### US-01 Entrar na plataforma
 Como pessoa dona dos próprios dados, quero entrar com e-mail e senha, para ver só o meu plano, o meu treino e a minha comida.
 
-- Crio a conta com e-mail e senha.
+- Crio a conta com nome, e-mail e senha.
 - Entro com esses dados.
 - Sair encerra o acesso.
 - Sem sessão, perfil, treino, comida e alertas não abrem.

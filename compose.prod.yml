@@ -30,6 +30,9 @@ services:
       DB_USERNAME: bodyevolve
       DB_PASSWORD: bodyevolve
       SESSION_DRIVER: database
+      SESSION_DOMAIN: localhost
+      SANCTUM_STATEFUL_DOMAINS: localhost:5173,127.0.0.1:5173,localhost:8000,127.0.0.1:8000,localhost,127.0.0.1
+      FRONTEND_URL: http://localhost:5173
       CACHE_STORE: database
       QUEUE_CONNECTION: database
       LOG_CHANNEL: stderr
