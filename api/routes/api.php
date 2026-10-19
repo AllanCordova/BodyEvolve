@@ -5,6 +5,7 @@ use App\Acesso\CriarConta;
 use App\Acesso\Entrar;
 use App\Acesso\Sair;
 use App\Acesso\SessaoAtual;
+use App\Algoritmo\LerAlertas;
 use App\Algoritmo\LerManutencao;
 use App\Objetivo\GuardarMeta;
 use App\Objetivo\LerMeta;
@@ -42,5 +43,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/treino/sessoes', LerSessoes::class);
     Route::post('/treino/sessoes', GuardarSessao::class);
     Route::get('/treino', AreaProtegida::class);
-    Route::get('/alertas', AreaProtegida::class);
+    Route::get('/alertas', LerAlertas::class);
 });
