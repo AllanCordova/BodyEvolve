@@ -8,6 +8,7 @@ use App\Algoritmo\Manutencao;
 use App\Models\User;
 use App\Perfil\Corpo;
 use App\Perfil\Perfil;
+use App\RegistroDeExercicio\Sessoes;
 
 class Consulta
 {
@@ -33,6 +34,7 @@ class Consulta
         $manutencao = Manutencao::kcal(
             $corpo['gasto_repouso_kcal'] ?? null,
             Perfil::query()->find($usuario->id)?->lifestyle,
+            Sessoes::liquidas($usuario->id, now()->toDateString()),
         );
         $alvo = AlvoDaMeta::de($goal, $manutencao, $corpo['weight_kg']);
 
