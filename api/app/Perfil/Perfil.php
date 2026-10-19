@@ -19,6 +19,7 @@ class Perfil extends Model
         'age_years',
         'sex',
         'height_cm',
+        'lifestyle',
     ];
 
     /**

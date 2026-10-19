@@ -87,6 +87,6 @@ npm test
 
 `npm run lint` is ESLint. `npm test` is Vitest, once, not in watch mode.
 
-On CI, Pest uses Postgres 18 with `DB_CONNECTION=pgsql`, `DB_HOST=127.0.0.1`, `DB_PORT=5432`, `DB_DATABASE=bodyevolve`, `DB_USERNAME=bodyevolve`, and `DB_PASSWORD=bodyevolve`. For a change that reads or writes the database, export those variables and run Pest against the Postgres from `compose.local.yml`, so the local run matches the API job.
+Pest uses Postgres 18 and the database `bodyevolve_test`. `tests/bootstrap.php` writes that name into `putenv`, `$_ENV`, and `$_SERVER` before the app boots, because PHPUnit's `force` does not clear `$_SERVER` and Laravel reads it. `RefreshDatabase` throws before migrating when the connection is any other database, including `bodyevolve`. Run `vendor/bin/pest` from `api/` with the Postgres from `compose.local.yml` already up.
 
 If a command fails, fix the cause and run the full set again. Then commit, push, and open the pull request as in [git.md](git.md), with `Resolves #<issue-number>` in the related-issue section.

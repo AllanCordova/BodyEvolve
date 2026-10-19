@@ -8,7 +8,9 @@ use App\Acesso\SessaoAtual;
 use App\Objetivo\GuardarMeta;
 use App\Objetivo\LerMeta;
 use App\Perfil\GuardarCorpo;
+use App\Perfil\GuardarRotina;
 use App\Perfil\LerCorpo;
+use App\Perfil\LerRotina;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/acesso/conta', CriarConta::class);
@@ -19,6 +21,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/acesso/sessao', Sair::class);
     Route::get('/perfil', LerCorpo::class);
     Route::put('/perfil', GuardarCorpo::class);
+    Route::get('/perfil/rotina', LerRotina::class);
+    Route::put('/perfil/rotina', GuardarRotina::class);
     Route::get('/objetivo', LerMeta::class);
     Route::put('/objetivo', GuardarMeta::class);
     Route::get('/treino', AreaProtegida::class);
