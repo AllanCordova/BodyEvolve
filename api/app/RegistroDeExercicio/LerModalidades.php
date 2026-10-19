@@ -32,12 +32,10 @@ class LerModalidades
                 'code' => $modalidade['code'],
                 'name' => $modalidade['name'],
                 'catalog' => $modalidade['catalog'],
+                'counts_as_strength' => $modalidade['counts_as_strength'],
                 'intensities' => Catalogo::intensidades($modalidade),
             ];
-        }, [
-            ...Catalogo::modalidades('cardio'),
-            ...Catalogo::modalidades('sports'),
-        ]);
+        }, Catalogo::modalidades());
 
         return response()->json($lista);
     }

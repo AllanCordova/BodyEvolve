@@ -1,5 +1,9 @@
 import { pedir, prepararCsrf } from '../acesso/api.js'
 
+export function lerExercicios() {
+  return pedir('/api/treino/exercicios')
+}
+
 export function lerModalidades() {
   return pedir('/api/treino/modalidades')
 }

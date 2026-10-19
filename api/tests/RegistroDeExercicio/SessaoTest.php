@@ -1,6 +1,7 @@
 <?php
 
 use App\Algoritmo\GastoDaSessao;
+use App\RegistroDeExercicio\Lancamento;
 use App\RegistroDeExercicio\Sessao;
 use Carbon\Carbon;
 
@@ -71,7 +72,20 @@ it('recusa modalidade fora do cardio e do esporte, intensidade inventada e sess�
         'duration_min' => 60,
         'intensity_code' => 'padrao',
         'already_in_lifestyle' => false,
-    ])->assertUnprocessable()->assertJsonValidationErrors('modality_code');
+    ])->assertUnprocessable()->assertJsonValidationErrors('exercises');
+
+    test()->postJson('/api/treino/sessoes', [
+        'modality_code' => 'circuito',
+        'duration_min' => 20,
+        'intensity_code' => 'padrao',
+        'already_in_lifestyle' => false,
+        'exercises' => [[
+            'exercise_code' => 'agachamento',
+            'sets_done' => 3,
+            'reps_done' => 10,
+            'load_kg' => 20,
+        ]],
+    ])->assertUnprocessable()->assertJsonValidationErrors('exercises');
 
     test()->postJson('/api/treino/sessoes', [
         'modality_code' => 'corrida',
@@ -119,5 +133,75 @@ it('lista cardio e esporte com a intensidade padrão no fator 1', function () {
     expect($caminhada['intensities'][0])->toBe(['code' => 'padrao', 'name' => 'Padrão', 'factor' => 1]);
     expect($caminhada['intensities'][2]['factor'])->toBe(1.15);
     expect($halterofilismo['catalog'])->toBe('sports');
-    expect(collect($lista)->contains(fn (array $item): bool => $item['catalog'] === 'strong'))->toBeFalse();
+    expect($halterofilismo['counts_as_strength'])->toBeTrue();
+    expect(collect($lista)->contains(fn (array $item): bool => $item['code'] === 'musculacao'))->toBeTrue();
+});
+
+it('guarda o exercício de força, mostra a faixa e preserva o lançamento anterior', function () {
+    usuarioComSenha('Ana', 'ana@example.com');
+    entrarCom('ana@example.com', 'senha-segura');
+    test()->putJson('/api/perfil', medidasDoCorpo())->assertOk();
+    test()->putJson('/api/objetivo', ['goal' => 'hipertrofia'])->assertOk();
+
+    $primeiro = test()->postJson('/api/treino/sessoes', [
+        'modality_code' => 'musculacao',
+        'duration_min' => 60,
+        'intensity_code' => 'padrao',
+        'already_in_lifestyle' => false,
+        'exercises' => [[
+            'exercise_code' => 'agachamento',
+            'sets_done' => 3,
+            'reps_done' => 8,
+            'load_kg' => 100,
+        ]],
+    ])->assertCreated()->assertJsonPath('rep_min', 8)->assertJsonPath('rep_max', 12)->json();
+
+    expect($primeiro['net_kcal'])->toBe(200);
+    expect($primeiro['exercises'][0]['load_kg'])->toBe(100);
+
+    Carbon::setTestNow('2026-10-19 11:00:00');
+
+    test()->postJson('/api/treino/sessoes', [
+        'modality_code' => 'halterofilismo',
+        'duration_min' => 40,
+        'intensity_code' => 'padrao',
+        'already_in_lifestyle' => false,
+        'exercises' => [[
+            'exercise_code' => 'agachamento',
+            'sets_done' => 4,
+            'reps_done' => 5,
+            'load_kg' => 110,
+        ]],
+    ])->assertCreated();
+
+    expect(Lancamento::query()->count())->toBe(2);
+    expect(Lancamento::query()->orderBy('recorded_at')->first()->load_kg)->toEqual(100);
+
+    test()->putJson('/api/objetivo', ['goal' => 'forca'])->assertOk();
+    Carbon::setTestNow('2026-10-19 12:00:00');
+    test()->postJson('/api/treino/sessoes', [
+        'modality_code' => 'powerlifting',
+        'duration_min' => 50,
+        'intensity_code' => 'padrao',
+        'already_in_lifestyle' => false,
+        'exercises' => [[
+            'exercise_code' => 'agachamento',
+            'sets_done' => 3,
+            'reps_done' => 3,
+            'load_kg' => 140,
+        ]],
+    ])->assertCreated()->assertJsonPath('rep_min', 1)->assertJsonPath('rep_max', 6);
+
+    test()->postJson('/api/treino/sessoes', [
+        'modality_code' => 'calistenia',
+        'duration_min' => 30,
+        'intensity_code' => 'padrao',
+        'already_in_lifestyle' => false,
+        'exercises' => [[
+            'exercise_code' => 'inventado',
+            'sets_done' => 2,
+            'reps_done' => 8,
+            'variation' => 'joelho',
+        ]],
+    ])->assertUnprocessable()->assertJsonValidationErrors('exercises.0.exercise_code');
 });
