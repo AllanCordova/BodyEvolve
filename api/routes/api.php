@@ -15,6 +15,7 @@ use App\Perfil\LerRotina;
 use App\RegistroDeExercicio\GuardarSessao;
 use App\RegistroDeExercicio\LerExercicios;
 use App\RegistroDeExercicio\LerModalidades;
+use App\RegistroDeExercicio\LerProgressao;
 use App\RegistroDeExercicio\LerSessoes;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +34,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/manutencao', LerManutencao::class);
     Route::get('/treino/modalidades', LerModalidades::class);
     Route::get('/treino/exercicios', LerExercicios::class);
+    Route::get('/treino/progressao', LerProgressao::class);
     Route::get('/treino/sessoes', LerSessoes::class);
     Route::post('/treino/sessoes', GuardarSessao::class);
     Route::get('/treino', AreaProtegida::class);
