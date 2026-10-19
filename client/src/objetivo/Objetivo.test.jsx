@@ -8,7 +8,14 @@ let sessao = null
 let meta = { goal: null }
 
 const alvos = {
-  hipertrofia: { kcal: 3131, maintenance_kcal: 2723, protein_g: 160, fat_g: 80, carb_g: 442.75 },
+  hipertrofia: {
+    kcal: 3131,
+    maintenance_kcal: 2723,
+    protein_g: 160,
+    fat_g: 80,
+    carb_g: 442.75,
+    micronutrients: ['Zinco', 'Magnésio', 'Vitamina D3'],
+  },
   emagrecimento: { kcal: 2178, maintenance_kcal: 2723, protein_g: 176, fat_g: 64, carb_g: 224.5 },
   forca: {
     kcal: 2859,
@@ -24,6 +31,8 @@ const alvos = {
     fat_g: 96,
     carb_g: 352.75,
     carb_warning: 'O carboidrato pedido não coube no saldo. Ficou o que sobrou.',
+    micronutrients: ['Sódio', 'Potássio', 'Magnésio', 'Ferro'],
+    hydration_reminder: 'Lembre de se hidratar.',
   },
 }
 
@@ -111,6 +120,9 @@ it('envia a meta escolhida e mostra o alvo que a API devolveu', async () => {
   fireEvent.click(within(formulario).getByRole('radio', { name: 'Hipertrofia' }))
   fireEvent.submit(formulario)
 
+  expect(await screen.findByText('Zinco')).toBeInTheDocument()
+  expect(screen.getByText('Magnésio')).toBeInTheDocument()
+  expect(screen.getByText('Vitamina D3')).toBeInTheDocument()
   expect(await screen.findByText('3131')).toBeInTheDocument()
   expect(screen.getByText('160')).toBeInTheDocument()
   expect(screen.getByText('80')).toBeInTheDocument()
@@ -127,6 +139,8 @@ it('envia a meta escolhida e mostra o alvo que a API devolveu', async () => {
   fireEvent.submit(formulario)
 
   expect(await screen.findByText('O carboidrato pedido não coube no saldo. Ficou o que sobrou.')).toBeInTheDocument()
+  expect(screen.getByText('Lembre de se hidratar.')).toBeInTheDocument()
+  expect(screen.getByText('Sódio')).toBeInTheDocument()
 
   fireEvent.click(within(formulario).getByRole('radio', { name: 'Emagrecimento' }))
   fireEvent.submit(formulario)
