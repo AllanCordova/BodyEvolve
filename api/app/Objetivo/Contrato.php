@@ -26,10 +26,12 @@ use OpenApi\Attributes as OA;
             nullable: true,
         ),
         new OA\Property(property: 'goal_started_on', type: 'string', format: 'date'),
-        new OA\Property(property: 'kcal', type: 'integer'),
+        new OA\Property(property: 'kcal', type: 'integer', description: 'Goal calories. Strength uses maintenance plus 5 percent.'),
+        new OA\Property(property: 'maintenance_kcal', type: 'integer'),
         new OA\Property(property: 'protein_g', type: 'number', format: 'float'),
         new OA\Property(property: 'fat_g', type: 'number', format: 'float'),
         new OA\Property(property: 'carb_g', type: 'number', format: 'float'),
+        new OA\Property(property: 'carb_warning', type: 'string'),
     ],
 )]
 class Contrato {}

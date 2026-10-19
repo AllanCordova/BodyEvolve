@@ -8,8 +8,23 @@ let sessao = null
 let meta = { goal: null }
 
 const alvos = {
-  hipertrofia: { kcal: 2047, protein_g: 160, fat_g: 80, carb_g: 171.75 },
-  emagrecimento: { kcal: 1424, protein_g: 176, fat_g: 64, carb_g: 36 },
+  hipertrofia: { kcal: 3131, maintenance_kcal: 2723, protein_g: 160, fat_g: 80, carb_g: 442.75 },
+  emagrecimento: { kcal: 2178, maintenance_kcal: 2723, protein_g: 176, fat_g: 64, carb_g: 224.5 },
+  forca: {
+    kcal: 2859,
+    maintenance_kcal: 2723,
+    protein_g: 144,
+    fat_g: 88,
+    carb_g: 320,
+  },
+  resistencia: {
+    kcal: 2723,
+    maintenance_kcal: 2723,
+    protein_g: 112,
+    fat_g: 96,
+    carb_g: 352.75,
+    carb_warning: 'O carboidrato pedido não coube no saldo. Ficou o que sobrou.',
+  },
 }
 
 function json(corpoResposta, status = 200) {
@@ -96,26 +111,39 @@ it('envia a meta escolhida e mostra o alvo que a API devolveu', async () => {
   fireEvent.click(within(formulario).getByRole('radio', { name: 'Hipertrofia' }))
   fireEvent.submit(formulario)
 
-  expect(await screen.findByText('2047')).toBeInTheDocument()
+  expect(await screen.findByText('3131')).toBeInTheDocument()
   expect(screen.getByText('160')).toBeInTheDocument()
   expect(screen.getByText('80')).toBeInTheDocument()
-  expect(screen.getByText('171.75')).toBeInTheDocument()
+  expect(screen.getByText('442.75')).toBeInTheDocument()
+
+  fireEvent.click(within(formulario).getByRole('radio', { name: 'Força' }))
+  fireEvent.submit(formulario)
+
+  expect((await screen.findAllByText('2859')).length).toBeGreaterThan(0)
+  expect(screen.getByText('2723')).toBeInTheDocument()
+  expect(screen.getByText(/com 5%/)).toBeInTheDocument()
+
+  fireEvent.click(within(formulario).getByRole('radio', { name: 'Resistência' }))
+  fireEvent.submit(formulario)
+
+  expect(await screen.findByText('O carboidrato pedido não coube no saldo. Ficou o que sobrou.')).toBeInTheDocument()
 
   fireEvent.click(within(formulario).getByRole('radio', { name: 'Emagrecimento' }))
   fireEvent.submit(formulario)
 
-  expect(await screen.findByText('1424')).toBeInTheDocument()
+  expect(await screen.findByText('2178')).toBeInTheDocument()
   expect(screen.getByText('176')).toBeInTheDocument()
-  expect(screen.queryByText('2047')).toBeNull()
+  expect(screen.queryByText('3131')).toBeNull()
 
   const gravacoes = vi.mocked(fetch).mock.calls.filter((chamada) => (
     String(chamada[0]).endsWith('/api/objetivo') && chamada[1]?.method === 'PUT'
   ))
 
-  expect(gravacoes).toHaveLength(2)
+  expect(gravacoes).toHaveLength(4)
   expect(gravacoes[0][0]).toBe(`${apiUrl}/api/objetivo`)
   expect(JSON.parse(gravacoes[0][1].body)).toEqual({ goal: 'hipertrofia' })
-  expect(JSON.parse(gravacoes[1][1].body)).toEqual({ goal: 'emagrecimento' })
+  expect(JSON.parse(gravacoes[1][1].body)).toEqual({ goal: 'forca' })
+  expect(JSON.parse(gravacoes[3][1].body)).toEqual({ goal: 'emagrecimento' })
   expect(gravacoes[0][1].credentials).toBe('include')
   expect(gravacoes[0][1].headers['X-XSRF-TOKEN']).toBe('token-de-teste')
 })

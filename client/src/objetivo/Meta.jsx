@@ -26,7 +26,7 @@ function fatia(valor, total) {
   return (Number(valor) / total) * 100
 }
 
-function Anel({ nome, kcal, protein_g, carb_g, fat_g }) {
+function Anel({ nome, kcal, maintenance_kcal, protein_g, carb_g, fat_g, meta, carb_warning }) {
   const total = Number(protein_g) + Number(carb_g) + Number(fat_g)
   const proteina = fatia(protein_g, total)
   const carboidrato = fatia(carb_g, total)
@@ -46,11 +46,26 @@ function Anel({ nome, kcal, protein_g, carb_g, fat_g }) {
           </p>
         </div>
       </div>
+      {maintenance_kcal !== undefined && maintenance_kcal !== null ? (
+        <p className="text-sm text-zinc-400">
+          {meta === 'forca' ? 'Manutenção' : 'Base'}{' '}
+          <span className="tabular-nums text-zinc-50">{maintenance_kcal}</span>
+          <span> kcal</span>
+          {meta === 'forca' ? (
+            <>
+              {' · com 5% '}
+              <span className="tabular-nums text-zinc-50">{kcal}</span>
+              <span> kcal</span>
+            </>
+          ) : null}
+        </p>
+      ) : null}
       <ul className="grid w-full grid-cols-3 gap-2">
         <Macro nome="Proteína" valor={protein_g} cor="text-pink-500" />
         <Macro nome="Carboidrato" valor={carb_g} cor="text-amber-500" />
         <Macro nome="Gordura" valor={fat_g} cor="text-violet-500" />
       </ul>
+      {carb_warning ? <p className="text-sm text-yellow-500" role="status">{carb_warning}</p> : null}
     </Card>
   )
 }
@@ -89,15 +104,18 @@ function FormularioMeta({ inicial, onGuardou }) {
       {temAlvo ? (
         <Anel
           nome={nomes[alvo.goal] ?? 'Alvo'}
+          meta={alvo.goal}
           kcal={alvo.kcal}
+          maintenance_kcal={alvo.maintenance_kcal}
           protein_g={alvo.protein_g}
           carb_g={alvo.carb_g}
           fat_g={alvo.fat_g}
+          carb_warning={alvo.carb_warning}
         />
       ) : null}
       {alvo.goal && !temAlvo ? (
         <p className="text-sm text-zinc-400">
-          O alvo aparece quando o corpo está preenchido.{' '}
+          O alvo aparece quando o corpo e a rotina estão preenchidos.{' '}
           <Link to="/perfil" className="font-medium text-zinc-50">Abrir o corpo</Link>
         </p>
       ) : null}
