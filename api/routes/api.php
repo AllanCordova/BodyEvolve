@@ -5,6 +5,7 @@ use App\Acesso\CriarConta;
 use App\Acesso\Entrar;
 use App\Acesso\Sair;
 use App\Acesso\SessaoAtual;
+use App\Algoritmo\LerManutencao;
 use App\Objetivo\GuardarMeta;
 use App\Objetivo\LerMeta;
 use App\Perfil\GuardarCorpo;
@@ -25,6 +26,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/perfil/rotina', GuardarRotina::class);
     Route::get('/objetivo', LerMeta::class);
     Route::put('/objetivo', GuardarMeta::class);
+    Route::get('/manutencao', LerManutencao::class);
     Route::get('/treino', AreaProtegida::class);
     Route::get('/comida', AreaProtegida::class);
     Route::get('/alertas', AreaProtegida::class);
