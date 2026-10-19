@@ -8,6 +8,7 @@ import Corpo from './perfil/Corpo.jsx'
 import Rotina from './perfil/Rotina.jsx'
 import Manutencao from './rota/Manutencao.jsx'
 import Treino from './registro-de-exercicio/Treino.jsx'
+import Comida from './registro-de-kcal/Comida.jsx'
 import { sair, sessaoAtual } from './acesso/api.js'
 import { mensagem } from './acesso/mensagem.js'
 import Cabecalho from './components/Cabecalho.jsx'
@@ -95,6 +96,10 @@ export default function App() {
             <Route
               path="/treino"
               element={sessao ? <Treino /> : <Navigate to="/entrar" replace />}
+            />
+            <Route
+              path="/comida"
+              element={sessao ? <Comida /> : <Navigate to="/entrar" replace />}
             />
             <Route path="*" element={<Navigate to={sessao ? '/' : '/entrar'} replace />} />
           </Routes>
