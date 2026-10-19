@@ -2,7 +2,9 @@
 
 namespace App\RegistroDeExercicio;
 
+use App\Algoritmo\FaixaDeRepeticoes;
 use App\Algoritmo\GastoDaSessao;
+use App\Objetivo\Meta;
 use App\Perfil\Corpo;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -56,6 +58,18 @@ class GuardarSessao
             'net_kcal' => $liquidas,
         ]);
 
+        foreach ($dados['exercises'] as $exercicio) {
+            Lancamento::query()->create([
+                'session_id' => $sessao->id,
+                'user_id' => $usuario->id,
+                'exercise_code' => $exercicio['exercise_code'],
+                'sets_done' => $exercicio['sets_done'],
+                'reps_done' => $exercicio['reps_done'],
+                'load_kg' => $exercicio['load_kg'],
+                'variation' => $exercicio['variation'],
+            ]);
+        }
+
         return response()->json(self::resposta($sessao, $modalidade['name'], $dados['intensity_code']), 201);
     }
 
@@ -64,7 +78,7 @@ class GuardarSessao
      */
     public static function resposta(Sessao $sessao, string $nome, string $intensidade): array
     {
-        return [
+        $resposta = [
             'id' => $sessao->id,
             'modality_code' => $sessao->modality_code,
             'modality_name' => $nome,
@@ -75,5 +89,50 @@ class GuardarSessao
             'trained_on' => $sessao->trained_on->toDateString(),
             'net_kcal' => $sessao->net_kcal,
         ];
+
+        $lancamentos = Lancamento::query()
+            ->where('session_id', $sessao->id)
+            ->orderBy('recorded_at')
+            ->get();
+
+        if ($lancamentos->isEmpty()) {
+            return $resposta;
+        }
+
+        $resposta['exercises'] = $lancamentos->map(fn (Lancamento $lancamento): array => [
+            'exercise_code' => $lancamento->exercise_code,
+            'sets_done' => $lancamento->sets_done,
+            'reps_done' => $lancamento->reps_done,
+            'load_kg' => $lancamento->load_kg,
+            'variation' => $lancamento->variation,
+        ])->all();
+
+        $faixa = self::faixa($sessao->user_id, $lancamentos->first()->exercise_code, $sessao->id);
+
+        return $resposta + $faixa;
+    }
+
+    /**
+     * @return array{rep_min?: int, rep_max?: int}
+     */
+    private static function faixa(string $usuarioId, string $exercicio, string $sessaoId): array
+    {
+        $anterior = Lancamento::query()
+            ->where('user_id', $usuarioId)
+            ->where('exercise_code', $exercicio)
+            ->where('session_id', '!=', $sessaoId)
+            ->orderByDesc('recorded_at')
+            ->first();
+
+        $faixa = FaixaDeRepeticoes::de(
+            Meta::query()->find($usuarioId)?->goal,
+            $anterior?->reps_done,
+        );
+
+        if ($faixa === null) {
+            return [];
+        }
+
+        return ['rep_min' => $faixa['min'], 'rep_max' => $faixa['max']];
     }
 }

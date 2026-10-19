@@ -51,6 +51,10 @@ beforeEach(() => {
       return json(modalidades)
     }
 
+    if (endereco.endsWith('/api/treino/exercicios')) {
+      return json([])
+    }
+
     if (endereco.endsWith('/api/treino/sessoes') && method === 'GET') {
       return json([])
     }

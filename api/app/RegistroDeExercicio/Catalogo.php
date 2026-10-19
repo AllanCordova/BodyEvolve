@@ -76,6 +76,7 @@ class Catalogo
         return [
             ...self::cardio(),
             ...self::esportes(),
+            ...self::forca(),
         ];
     }
 
@@ -260,6 +261,33 @@ class Catalogo
             ]),
             self::linha('sports', 'beisebol', 'Beisebol', 5.0, false),
             self::linha('sports', 'criquete', 'Críquete', 4.8, false),
+        ];
+    }
+
+    /**
+     * @return list<array{code: string, name: string, catalog: string, base: float, counts_as_strength: bool, anchors: list<array{code: string, name: string, factor: float}>}>
+     */
+    private static function forca(): array
+    {
+        return [
+            self::linha('strong', 'musculacao', 'Musculação tradicional', 3.5, true, [
+                ['circuito', 'Circuito em supersérie', 1.66],
+                ['vigoroso', 'Potência vigorosa', 1.71],
+            ]),
+            self::linha('strong', 'calistenia', 'Calistenia de força', 3.8, true, [
+                ['alta', 'Alta intensidade', 1.71],
+            ]),
+            self::linha('strong', 'powerlifting', 'Powerlifting', 6.0, true, [
+                ['lento', 'Lento ou explosivo', 0.83],
+            ]),
+            self::linha('strong', 'lpo', 'LPO', 5.0, true, [
+                ['vigoroso', 'Potência vigorosa', 1.20],
+            ]),
+            self::linha('strong', 'strongman', 'Strongman', 6.0, true),
+            self::linha('strong', 'crossfit', 'CrossFit', 7.5, true, [
+                ['hiit', 'HIIT', 1.47],
+            ]),
+            self::linha('strong', 'preparacao-fisica', 'Preparação física esportiva', 7.8, true),
         ];
     }
 }
