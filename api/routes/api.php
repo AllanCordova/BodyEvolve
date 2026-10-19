@@ -17,6 +17,8 @@ use App\RegistroDeExercicio\LerExercicios;
 use App\RegistroDeExercicio\LerModalidades;
 use App\RegistroDeExercicio\LerProgressao;
 use App\RegistroDeExercicio\LerSessoes;
+use App\RegistroDeKcal\GuardarComida;
+use App\RegistroDeKcal\LerComida;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/acesso/conta', CriarConta::class);
@@ -35,9 +37,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/treino/modalidades', LerModalidades::class);
     Route::get('/treino/exercicios', LerExercicios::class);
     Route::get('/treino/progressao', LerProgressao::class);
+    Route::get('/comida', LerComida::class);
+    Route::put('/comida', GuardarComida::class);
     Route::get('/treino/sessoes', LerSessoes::class);
     Route::post('/treino/sessoes', GuardarSessao::class);
     Route::get('/treino', AreaProtegida::class);
-    Route::get('/comida', AreaProtegida::class);
     Route::get('/alertas', AreaProtegida::class);
 });

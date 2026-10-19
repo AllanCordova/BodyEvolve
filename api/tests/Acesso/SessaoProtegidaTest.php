@@ -43,7 +43,14 @@ it('devolve a conta da sessão e deixa as áreas vazias', function () {
         'weight_kg' => null,
     ]);
     test()->getJson('/api/treino')->assertNoContent();
-    test()->getJson('/api/comida')->assertNoContent();
+    test()->getJson('/api/comida')->assertExactJson([
+        'intake_date' => now()->toDateString(),
+        'kcal' => null,
+        'protein_g' => null,
+        'fat_g' => null,
+        'carb_g' => null,
+        'fiber_g' => null,
+    ]);
     test()->getJson('/api/alertas')->assertNoContent();
 
     guardarCookies(test()->deleteJson('/api/acesso/sessao'))->assertNoContent();

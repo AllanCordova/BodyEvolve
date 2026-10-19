@@ -15,6 +15,7 @@
             <directory>tests/Objetivo</directory>
             <directory>tests/Algoritmo</directory>
             <directory>tests/RegistroDeExercicio</directory>
+            <directory>tests/RegistroDeKcal</directory>
         </testsuite>
     </testsuites>
     <source>

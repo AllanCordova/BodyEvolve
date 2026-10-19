@@ -44,7 +44,9 @@ export default function Inicio({ sessao }) {
         </h2>
       </Card>
       <Card>
-        <h2 className="text-lg font-medium">Comida</h2>
+        <h2 className="text-lg font-medium">
+          <Link to="/comida" className="flex min-h-11 items-center">Comida</Link>
+        </h2>
       </Card>
       <Card>
         <h2 className="text-lg font-medium">Alertas</h2>
