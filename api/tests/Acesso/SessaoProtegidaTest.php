@@ -51,7 +51,7 @@ it('devolve a conta da sessão e deixa as áreas vazias', function () {
         'carb_g' => null,
         'fiber_g' => null,
     ]);
-    test()->getJson('/api/alertas')->assertNoContent();
+    test()->getJson('/api/alertas')->assertExactJson([]);
 
     guardarCookies(test()->deleteJson('/api/acesso/sessao'))->assertNoContent();
 

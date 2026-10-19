@@ -6,6 +6,7 @@ import Inicio from './acesso/Inicio.jsx'
 import Meta from './objetivo/Meta.jsx'
 import Corpo from './perfil/Corpo.jsx'
 import Rotina from './perfil/Rotina.jsx'
+import Alertas from './rota/Alertas.jsx'
 import Manutencao from './rota/Manutencao.jsx'
 import Treino from './registro-de-exercicio/Treino.jsx'
 import Comida from './registro-de-kcal/Comida.jsx'
@@ -92,6 +93,10 @@ export default function App() {
             <Route
               path="/manutencao"
               element={sessao ? <Manutencao /> : <Navigate to="/entrar" replace />}
+            />
+            <Route
+              path="/alertas"
+              element={sessao ? <Alertas /> : <Navigate to="/entrar" replace />}
             />
             <Route
               path="/treino"
