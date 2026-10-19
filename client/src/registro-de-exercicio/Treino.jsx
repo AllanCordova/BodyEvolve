@@ -6,7 +6,7 @@ import Button from '../components/ui/button.jsx'
 import Card from '../components/ui/card.jsx'
 import Input from '../components/ui/input.jsx'
 import Label from '../components/ui/label.jsx'
-import { guardarSessao, lerExercicios, lerModalidades, lerSessoes } from './api.js'
+import { guardarSessao, lerExercicios, lerModalidades, lerProgressao, lerSessoes } from './api.js'
 import { esquemaSessao } from './esquema.js'
 
 function Gasto({ valor }) {
@@ -161,18 +161,20 @@ export default function Treino() {
   const [modalidades, setModalidades] = useState(null)
   const [exercicios, setExercicios] = useState([])
   const [sessoes, setSessoes] = useState([])
+  const [progressao, setProgressao] = useState([])
   const [ultima, setUltima] = useState(null)
   const [falha, setFalha] = useState('')
 
   useEffect(() => {
     let ativa = true
 
-    Promise.all([lerModalidades(), lerSessoes(), lerExercicios()])
-      .then(([lista, dia, catalogo]) => {
+    Promise.all([lerModalidades(), lerSessoes(), lerExercicios(), lerProgressao()])
+      .then(([lista, dia, catalogo, leitura]) => {
         if (ativa) {
           setModalidades(lista)
           setSessoes(dia)
           setExercicios(catalogo)
+          setProgressao(leitura)
         }
       })
       .catch((erro) => {
@@ -189,6 +191,7 @@ export default function Treino() {
   function aoGuardar(sessao) {
     setUltima(sessao)
     setSessoes((atual) => [...atual, sessao])
+    lerProgressao().then(setProgressao).catch(() => {})
   }
 
   return (
@@ -208,6 +211,22 @@ export default function Treino() {
         </p>
       ) : null}
       {modalidades ? <Formulario modalidades={modalidades} exercicios={exercicios} onGuardou={aoGuardar} /> : null}
+      {progressao.some((item) => item.state_label || item.message) ? (
+        <Card>
+          <ul className="flex flex-col gap-2">
+            {progressao.filter((item) => item.state_label || item.message).map((item) => (
+              <li key={item.exercise_code} className="text-sm">
+                <span>{item.exercise_name}</span>
+                {item.state_label ? <span className="text-zinc-400"> {item.state_label}</span> : null}
+                {item.message ? <span className="text-yellow-500"> {item.message}</span> : null}
+                {item.suggested_load_kg !== null && item.suggested_load_kg !== undefined ? (
+                  <span className="tabular-nums text-zinc-50"> {item.suggested_load_kg} kg</span>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+        </Card>
+      ) : null}
       {sessoes.length ? (
         <Card>
           <ul className="flex flex-col gap-2">

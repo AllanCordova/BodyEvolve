@@ -55,6 +55,17 @@ beforeEach(() => {
       return json([])
     }
 
+    if (endereco.endsWith('/api/treino/progressao')) {
+      return json([{
+        exercise_code: 'agachamento',
+        exercise_name: 'Agachamento',
+        state: 'progrediu',
+        state_label: 'Progrediu',
+        message: null,
+        suggested_load_kg: null,
+      }])
+    }
+
     if (endereco.endsWith('/api/treino/sessoes') && method === 'GET') {
       return json([])
     }
@@ -86,6 +97,9 @@ it('envia a sessão e mostra o gasto líquido que a API devolveu', async () => {
   fireEvent.submit(entrar)
 
   fireEvent.click(await screen.findByRole('link', { name: 'Treino' }))
+
+  expect(await screen.findByText('Progrediu')).toBeInTheDocument()
+  expect(screen.getByText('Agachamento')).toBeInTheDocument()
 
   const formulario = await screen.findByRole('form', { name: 'Treino' })
   fireEvent.change(within(formulario).getByLabelText('Intensidade'), { target: { value: 'muito-rapida' } })
