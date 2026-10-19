@@ -4,6 +4,7 @@ namespace App\Algoritmo;
 
 use App\Perfil\Corpo;
 use App\Perfil\Perfil;
+use App\RegistroDeExercicio\Sessoes;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use OpenApi\Attributes as OA;
@@ -36,22 +37,12 @@ class LerManutencao
             'lifestyle' => $lifestyle,
         ];
 
-        $manutencao = Manutencao::kcal($basal, $lifestyle, self::sessoesDeHoje());
+        $manutencao = Manutencao::kcal($basal, $lifestyle, Sessoes::liquidas($usuario->id, now()->toDateString()));
 
         if ($manutencao !== null) {
             $resposta['maintenance_kcal'] = $manutencao;
         }
 
         return response()->json($resposta);
-    }
-
-    /**
-     * Sessions land with the training log. Until then the day has none.
-     *
-     * @return list<array{net_kcal: int|float, already_in_lifestyle: bool}>
-     */
-    private static function sessoesDeHoje(): array
-    {
-        return [];
     }
 }
