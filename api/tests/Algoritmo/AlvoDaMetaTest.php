@@ -18,6 +18,7 @@ it('omite o alvo quando falta o corpo ou a rotina', function () {
     test()->putJson('/api/objetivo', ['goal' => 'hipertrofia'])->assertExactJson([
         'goal' => 'hipertrofia',
         'goal_started_on' => '2026-10-16',
+        'micronutrients' => ['Zinco', 'Magnésio', 'Vitamina D3'],
     ]);
 
     test()->putJson('/api/perfil', medidasDoCorpo())->assertOk();
@@ -25,6 +26,7 @@ it('omite o alvo quando falta o corpo ou a rotina', function () {
     test()->getJson('/api/objetivo')->assertExactJson([
         'goal' => 'hipertrofia',
         'goal_started_on' => '2026-10-16',
+        'micronutrients' => ['Zinco', 'Magnésio', 'Vitamina D3'],
     ]);
 });
 
@@ -37,6 +39,7 @@ it('recalcula calorias e nutrientes quando a meta muda', function () {
     test()->putJson('/api/objetivo', ['goal' => 'hipertrofia'])->assertExactJson([
         'goal' => 'hipertrofia',
         'goal_started_on' => '2026-10-16',
+        'micronutrients' => ['Zinco', 'Magnésio', 'Vitamina D3'],
         'kcal' => 3131,
         'maintenance_kcal' => 2723,
         'protein_g' => 160,
@@ -47,6 +50,7 @@ it('recalcula calorias e nutrientes quando a meta muda', function () {
     test()->putJson('/api/objetivo', ['goal' => 'emagrecimento'])->assertExactJson([
         'goal' => 'emagrecimento',
         'goal_started_on' => '2026-10-16',
+        'micronutrients' => ['Cálcio', 'Ferro', 'Complexo B'],
         'kcal' => 2178,
         'maintenance_kcal' => 2723,
         'protein_g' => 176,
@@ -59,6 +63,7 @@ it('recalcula calorias e nutrientes quando a meta muda', function () {
     test()->putJson('/api/objetivo', ['goal' => 'forca'])->assertExactJson([
         'goal' => 'forca',
         'goal_started_on' => '2026-10-16',
+        'micronutrients' => ['Cálcio', 'Vitamina D3', 'Magnésio'],
         'kcal' => 2859,
         'maintenance_kcal' => 2723,
         'protein_g' => 144,
@@ -69,6 +74,8 @@ it('recalcula calorias e nutrientes quando a meta muda', function () {
     test()->putJson('/api/objetivo', ['goal' => 'resistencia'])->assertExactJson([
         'goal' => 'resistencia',
         'goal_started_on' => '2026-10-16',
+        'micronutrients' => ['Sódio', 'Potássio', 'Magnésio', 'Ferro'],
+        'hydration_reminder' => 'Lembre de se hidratar.',
         'kcal' => 2723,
         'maintenance_kcal' => 2723,
         'protein_g' => 112,
@@ -92,6 +99,7 @@ it('avisa quando o carboidrato da força não cabe e nunca corta a gordura abaix
     test()->putJson('/api/objetivo', ['goal' => 'forca'])->assertExactJson([
         'goal' => 'forca',
         'goal_started_on' => '2026-10-16',
+        'micronutrients' => ['Cálcio', 'Vitamina D3', 'Magnésio'],
         'kcal' => 2212,
         'maintenance_kcal' => 2107,
         'protein_g' => 162,

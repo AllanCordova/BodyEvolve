@@ -101,6 +101,19 @@ function FormularioMeta({ inicial, onGuardou }) {
         onGuardou(gravada)
       })}
     >
+      {alvo.micronutrients?.length ? (
+        <Card className="flex flex-col gap-2">
+          <p className="text-sm text-zinc-400">Foco de micronutrientes</p>
+          <ul className="flex flex-col gap-1">
+            {alvo.micronutrients.map((nome) => (
+              <li key={nome} className="text-sm text-zinc-50">{nome}</li>
+            ))}
+          </ul>
+          {alvo.hydration_reminder ? (
+            <p className="text-sm text-zinc-400">{alvo.hydration_reminder}</p>
+          ) : null}
+        </Card>
+      ) : null}
       {temAlvo ? (
         <Anel
           nome={nomes[alvo.goal] ?? 'Alvo'}

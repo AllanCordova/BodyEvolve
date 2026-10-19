@@ -19,17 +19,20 @@ it('grava uma das quatro metas e troca a data só quando a meta muda', function 
     test()->putJson('/api/objetivo', ['goal' => 'hipertrofia'])->assertExactJson([
         'goal' => 'hipertrofia',
         'goal_started_on' => '2026-10-16',
+        'micronutrients' => ['Zinco', 'Magnésio', 'Vitamina D3'],
     ]);
 
     Carbon::setTestNow('2026-10-17 10:00:00');
     test()->putJson('/api/objetivo', ['goal' => 'hipertrofia'])->assertExactJson([
         'goal' => 'hipertrofia',
         'goal_started_on' => '2026-10-16',
+        'micronutrients' => ['Zinco', 'Magnésio', 'Vitamina D3'],
     ]);
 
     test()->putJson('/api/objetivo', ['goal' => 'forca'])->assertExactJson([
         'goal' => 'forca',
         'goal_started_on' => '2026-10-17',
+        'micronutrients' => ['Cálcio', 'Vitamina D3', 'Magnésio'],
     ]);
 
     expect(Meta::query()->count())->toBe(1);

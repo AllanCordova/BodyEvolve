@@ -3,6 +3,7 @@
 namespace App\Objetivo;
 
 use App\Algoritmo\AlvoDaMeta;
+use App\Algoritmo\FocoDeMicronutrientes;
 use App\Algoritmo\Manutencao;
 use App\Models\User;
 use App\Perfil\Corpo;
@@ -11,7 +12,7 @@ use App\Perfil\Perfil;
 class Consulta
 {
     /**
-     * @return array{goal: string|null, goal_started_on?: string, kcal?: int, maintenance_kcal?: int, protein_g?: int|float, fat_g?: int|float, carb_g?: int|float, carb_warning?: string}
+     * @return array{goal: string|null, goal_started_on?: string, micronutrients?: list<string>, hydration_reminder?: string, kcal?: int, maintenance_kcal?: int, protein_g?: int|float, fat_g?: int|float, carb_g?: int|float, carb_warning?: string}
      */
     public static function resposta(User $usuario): array
     {
@@ -25,6 +26,7 @@ class Consulta
         $resposta = [
             'goal' => $goal,
             'goal_started_on' => $meta->goal_started_on->toDateString(),
+            ...FocoDeMicronutrientes::de($goal),
         ];
 
         $corpo = Corpo::resposta($usuario);
